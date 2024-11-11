@@ -1,0 +1,22 @@
+{
+  "name": "to-do",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ralento/Todolist.git"
+  },
+  "author": "Ralento.mvk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ralento/Todolist/issues"
+  },
+  "homepage": "https://github.com/Ralento/Todolist#readme",
+  "dependencies": {
+    "node.js": "^0.0.1-security"
+  }
+}
