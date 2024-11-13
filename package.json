@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Ralento/Todolist#readme",
   "dependencies": {
+    "mysql2": "^3.11.4",
     "node.js": "^0.0.1-security"
   }
 }
