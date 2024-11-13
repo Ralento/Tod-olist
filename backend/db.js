@@ -6,7 +6,7 @@ const connection = mysql.createConnection({
   host: 'localhost', // Cambia a la IP o dominio de tu base de datos si no es local
   user: 'root',
   password: '',
-  database: 'todo'
+  database: 'to-do'
 });
 
 // Conectar a la base de datos
