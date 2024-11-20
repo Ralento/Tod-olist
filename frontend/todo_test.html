@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <link rel="stylesheet" href="todo_test.css">
+</head>
+<body>
+  <div class="contenedor">
+    <!-- Barra superior -->
+    <header class="barra-superior">
+      <div class="menu-icono" onclick="toggleSidebar()"></div>
+      <h1 class="titulo">To-Do List</h1>
+    </header>
+
+    <!-- Barra lateral -->
+    <div class="barra-lateral" id="sidebar">
+      <div class="cerrar" onclick="toggleSidebar()">X</div>
+      <ul>
+        <li>Inicio</li>
+        <li>Mis Tareas</li>
+        <li>Calendario</li>
+        <li>Importante</li>
+        <li>Usuario</li>
+        <li>Ajustes</li>
+      </ul>
+    </div>
+
+    <!-- Contenido principal -->
+    <main class="contenido">
+      <div class="icono-usuario"></div>
+      <h2 class="mensaje-crear">Crea un pendiente</h2>
+      <div class="crear-pendiente">
+        <div class="icono-mas">
+          <div class="linea-horizontal"></div>
+          <div class="linea-vertical"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('mostrar');
+    }
+  </script>
+</body>
+</html>
