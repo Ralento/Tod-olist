@@ -127,7 +127,7 @@ body {
   overflow: hidden;
   transition-duration: .7s;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
-  background: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
+  background: #09a7b3;
 }
 
 .sign {
@@ -228,7 +228,7 @@ body {
 }
 
 .formulario .btn-hecho {
-  background-color: #00ddeb;
+  background-color: #09a7b3;
   color: white;
   align-self: flex-end;
   border: none;
