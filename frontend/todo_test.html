@@ -15,15 +15,16 @@
     </header>
 
     <!-- Barra lateral -->
-    <div class="barra-lateral" id="sidebar">
+    <div class="barra-lateral oculto" id="sidebar">
       <div class="cerrar" onclick="toggleSidebar()">X</div>
       <ul>
         <li>Inicio</li>
         <li>Mis Tareas</li>
-        <li>Calendario</li>
         <li>Importante</li>
-        <li>Usuario</li>
-        <li>Ajustes</li>
+        <li>Perfil</li>
+        <li></li>
+        <li></li>
+        <li></li>
       </ul>
     </div>
 
@@ -32,19 +33,77 @@
       <div class="icono-usuario"></div>
       <h2 class="mensaje-crear">Crea un pendiente</h2>
       <div class="crear-pendiente">
-        <div class="icono-mas">
-          <div class="linea-horizontal"></div>
-          <div class="linea-vertical"></div>
-        </div>
+        <button class="Btn">
+          <div class="sign">+</div>
+          <div class="text">Create</div>
+        </button>
       </div>
     </main>
   </div>
 
+  <!-- Modal Formulario -->
+  <div id="modal-form" class="modal oculto">
+    <div class="formulario">
+      <!-- Encabezado del formulario con la "X" -->
+      <div class="form-header">
+        <h2>Nuevo Proyecto</h2>
+        <span class="cerrar-form" onclick="closeModal()">X</span>
+      </div>
+      <!-- Contenido del formulario -->
+      <label for="nombre">Nombre del proyecto:</label>
+      <input type="text" id="nombre" name="nombre" placeholder="Ingresa el nombre">
+
+      <label for="prioridad">Prioridad del proyecto:</label>
+      <select id="prioridad" name="prioridad">
+        <option value="alta">Alta</option>
+        <option value="media">Media</option>
+        <option value="baja">Baja</option>
+      </select>
+
+      <label for="fecha">Fecha del proyecto:</label>
+      <input type="date" id="fecha" name="fecha">
+
+      <button id="btn-hecho" class="btn-hecho">Hecho</button>
+    </div>
+  </div>
+
+  <!-- Script de barra lateral y formulario -->
   <script>
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      sidebar.classList.toggle('mostrar');
-    }
+    // Variables
+    const menuIcono = document.querySelector(".menu-icono");
+    const barraLateral = document.querySelector(".barra-lateral");
+    const cerrarBarra = document.querySelector(".barra-lateral .cerrar");
+    const Btn = document.querySelector(".Btn");
+    const formularioModal = document.querySelector("#modal-form");
+    const cerrarForm = document.querySelector(".cerrar-form");
+
+    // Mostrar barra lateral
+    menuIcono.addEventListener("click", function () {
+        barraLateral.classList.toggle("mostrar"); // Togglear la visibilidad de la barra lateral
+    });
+
+    // Mostrar el formulario
+    Btn.addEventListener("click", function () {
+        formularioModal.style.display = "flex"; // Mostrar formulario
+    });
+
+    // Cerrar la barra lateral
+    cerrarBarra.addEventListener("click", function () {
+        barraLateral.classList.remove("mostrar"); // Cerrar la barra lateral
+    });
+
+    // Cerrar el formulario
+    cerrarForm.addEventListener("click", function () {
+        formularioModal.style.display = "none"; // Cerrar formulario
+    });
+
+    // Para cerrar el formulario al hacer clic fuera de él
+    window.addEventListener("click", function (event) {
+        if (event.target === formularioModal) {
+            formularioModal.style.display = "none"; // Cerrar formulario si clickeas fuera
+        }
+    });
+
   </script>
 </body>
 </html>
