@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calendario</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.css" />
+  <link rel="stylesheet" href="calendario.css">
+</head>
+<body>
+  <!-- Barra Superior -->
+  <div class="barra-superior">
+    <div class="menu-icono" onclick="mostrarMenu()"></div>
+    <div class="titulo">To-Do List</div>
+  </div>
+
+  <!-- Barra Lateral -->
+  <div class="barra-lateral" id="barraLateral">
+    <div class="cerrar" onclick="cerrarMenu()">×</div>
+    <ul>
+      <li>Inicio</li>
+      <li>Calendario</li>
+      <li>Pendientes</li>
+      <li>Configuración</li>
+    </ul>
+  </div>
+
+  <!-- Contenido -->
+  <div class="contenido">
+    <h2 class="titulo-calendario">Calendario</h2>
+    <div id="calendario"></div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.js"></script>
+  <script>
+    // Mostrar/ocultar barra lateral
+    function mostrarMenu() {
+      document.getElementById('barraLateral').classList.add('mostrar');
+    }
+
+    function cerrarMenu() {
+      document.getElementById('barraLateral').classList.remove('mostrar');
+    }
+
+    // Configuración del FullCalendar
+    document.addEventListener('DOMContentLoaded', function () {
+      const calendarEl = document.getElementById('calendario');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'es', // Establecer el idioma a español
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        buttonText: {
+          today: 'Hoy',
+          month: 'Mes',
+          week: 'Semana',
+          day: 'Día'
+        },
+        events: [
+          {
+            title: 'Evento de prueba',
+            start: '2024-11-25',
+            end: '2024-11-27',
+            color: '#09a7b3' // Color personalizado para el evento
+          },
+          {
+            title: 'Otro evento',
+            start: '2024-11-30',
+            color: '#f45b5b'
+          }
+        ]
+      });
+      calendar.render();
+    });
+  </script>
+</body>
+</html>
