@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>To-Do List</title>
   <link rel="stylesheet" href="todo_test.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
   <div class="contenedor">
@@ -18,15 +19,13 @@
     <div class="barra-lateral oculto" id="sidebar">
       <div class="cerrar" onclick="toggleSidebar()">X</div>
       <ul>
-        <li>Inicio</li>
-        <li>Mis tareas</li>
-        <li>Importante</li>
-        <li>Calendario</li>
-        <li>Perfil</li>
+          <li><a href="tareas.html"><i class="fas fa-home"style="font-size: 30px;"></i><p>Tareas</p></a></li>
+          <li><a href="calendario.html"><i class="fa-regular fa-calendar"style="font-size: 30px;"></i><p>Calendario</p></a></li>
+          <li><a href="Perfil.html"><i class="fa-regular fa-user"style="font-size: 30px;"></i><p>Perfil</p></a></li>
       </ul>
-    </div>
+  </div>
+  
 
-    <!-- Contenido principal -->
     <main class="contenido">
       <div class="icono-usuario"></div>
       <h2 class="mensaje-crear">Crea un pendiente</h2>
@@ -39,15 +38,15 @@
     </main>
   </div>
 
-  <!-- Modal Formulario -->
+  
   <div id="modal-form" class="modal oculto">
     <div class="formulario">
-      <!-- Encabezado del formulario con la "X" -->
+      
       <div class="form-header">
         <h2>Nuevo Proyecto</h2>
         <span class="cerrar-form" onclick="closeModal()" style="cursor: pointer;">X</span>
       </div>
-      <!-- Contenido del formulario -->
+      
       <label for="nombre">Nombre del proyecto:</label>
       <input type="text" id="nombre" name="nombre" placeholder="Ingresa el nombre">
 
@@ -65,7 +64,7 @@
     </div>
   </div>
 
-  <!-- Script de barra lateral y formulario -->
+  
   <script>
     // Variables
     const menuIcono = document.querySelector(".menu-icono");
@@ -77,28 +76,28 @@
 
     // Mostrar barra lateral
     menuIcono.addEventListener("click", function () {
-        barraLateral.classList.toggle("mostrar"); // Togglear la visibilidad de la barra lateral
+        barraLateral.classList.toggle("mostrar"); 
     });
 
     // Mostrar el formulario
     Btn.addEventListener("click", function () {
-        formularioModal.style.display = "flex"; // Mostrar formulario
+        formularioModal.style.display = "flex"; 
     });
 
     // Cerrar la barra lateral
     cerrarBarra.addEventListener("click", function () {
-        barraLateral.classList.remove("mostrar"); // Cerrar la barra lateral
+        barraLateral.classList.remove("mostrar"); 
     });
 
     // Cerrar el formulario
     cerrarForm.addEventListener("click", function () {
-        formularioModal.style.display = "none"; // Cerrar formulario
+        formularioModal.style.display = "none"; 
     });
 
     // Para cerrar el formulario al hacer clic fuera de él
     window.addEventListener("click", function (event) {
         if (event.target === formularioModal) {
-            formularioModal.style.display = "none"; // Cerrar formulario si clickeas fuera
+            formularioModal.style.display = "none"; 
         }
     });
 

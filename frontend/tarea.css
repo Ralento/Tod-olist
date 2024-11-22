@@ -1,236 +1,293 @@
 /* General */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    height: 100vh;
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #1f1f1f;
-    color: white;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .contenedor {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-  }
-  
-  /* Barra superior */
-  .barra-superior {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #2c2c2c;
-    padding: 15px 20px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
-  }
-  
-  .menu-icono {
-    width: 25px;
-    height: 25px;
-    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iMjUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGxpbmUgeDE9IjAiIHkxPSI1IiB4Mj0iMjUiIHkyPSI1IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjMiLz48bGluZSB4MT0iMCIgeTE9IjEyLjUiIHgyPSIyNSIgeTI9IjEyLjUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMyIvPjxsaW5lIHgxPSIwIiB5MT0iMjAiIHgyPSIyNSIgeTI9IjIwIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjMiLz48L3N2Zz4=');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    cursor: pointer;
-  }
-  
-  .titulo {
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  /* Barra lateral */
-  .barra-lateral {
-    position: fixed;
-    top: 0;
-    left: -250px;
-    width: 250px;
-    height: 100%;
-    background-color: #2c2c2c;
-    padding: 20px;
-    transition: left 0.3s ease;
-    z-index: 999;
-  }
-  
-  .barra-lateral.mostrar {
-    left: 0;
-  }
-  
-  .barra-lateral .cerrar {
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    margin-bottom: 20px;
-  }
-  
-  .barra-lateral ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .barra-lateral ul li {
-    padding: 10px 0;
-    cursor: pointer;
-  }
-  
-  /* Contenido principal */
-  .contenido {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding: 15px 20px;
-    padding-left: 250px; /* Mueve todo el contenido más a la derecha */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  }
-  .contenido h2{
-    padding: 15px 20px;
-    padding-left: 75px;
-  }
-  .mensaje-crear {
-    font-size: 24px;
-    font-weight: 600;
-    margin: 20px 0;
-  }
-  
-  /* Pendientes */
-  .pendientes-lista {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 100%; /* Ajustar a pantalla completa */
-    max-width: 900px; /* Ancho máximo para buena presentación */
-    margin-left: 50px; /* Ajusta este valor para mover los pendientes */
-  }
-  
-  .pendiente {
-    display: flex;
-    align-items: center;
-    padding: 10px 15px;
-    border-radius: 12px;
-    font-size: 18px;
-    font-weight: bold;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .pendiente:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-  }
-  
-  .terminado {
-    background-color: rgba(86, 135, 80, 1);
-    color: white;
-  }
-  
-  .en-proceso {
-    background-color: #90a4ae;
-    color: white;
-  }
-  
-  .por-vencer {
-    background-color: rgba(171, 45, 40, 1);
-    color: white;
-  }
-  
-  .icono {
-    margin-right: 10px;
-  }
-  /* Estilos del checkbox */
-  .container {
-    display: block;
-    position: relative;
-    cursor: pointer;
-    font-size: 1.5rem;
-    user-select: none;
-    margin-right: 10px; /* Espaciado entre checkbox e ícono */
-  }
+body {
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #1f1f1f;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
 
-  .container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-  }
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
 
-  /* Estilo del círculo del checkbox */
-  .checkmark {
-    --clr: #0B6E4F;
-    position: relative;
-    height: 1.3em;
-    width: 1.3em;
-    background-color: #ccc;
-    border-radius: 50%;
-    transition: 300ms;
-  }
+/* Barra superior */
+.barra-superior {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #2c2c2c;
+  padding: 15px 20px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+}
 
-  .container input:checked ~ .checkmark {
-    background-color: var(--clr);
-    border-radius: 0.5rem;
-    animation: pulse 500ms ease-in-out;
-  }
+.menu-icono {
+  width: 25px;
+  height: 25px;
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iMjUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGxpbmUgeDE9IjAiIHkxPSI1IiB4Mj0iMjUiIHkyPSI1IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjMiLz48bGluZSB4MT0iMCIgeTE9IjEyLjUiIHgyPSIyNSIgeTI9IjEyLjUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMyIvPjxsaW5lIHgxPSIwIiB5MT0iMjAiIHgyPSIyNSIgeTI9IjIwIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjMiLz48L3N2Zz4='); 
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+}
 
-  /* Checkmark dentro del círculo */
-  .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-  }
+.titulo {
+  font-size: 20px;
+  font-weight: bold;
+  color: #09a7b3;
+}
 
-  .container input:checked ~ .checkmark:after {
-    display: block;
-  }
+/* Barra lateral */
+.barra-lateral {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: #2c2c2c;
+  padding: 20px;
+  transition: left 0.3s ease;
+  z-index: 999;
+}
 
-  .container .checkmark:after {
-    left: 0.45em;
-    top: 0.25em;
-    width: 0.25em;
-    height: 0.5em;
-    border: solid #E0E0E2;
-    border-width: 0 0.15em 0.15em 0;
-    transform: rotate(45deg);
-  }
+.barra-lateral.mostrar {
+  left: 0;
+}
 
-  @keyframes pulse {
-    0% {
+.barra-lateral .cerrar {
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.barra-lateral ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.barra-lateral ul li {
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.barra-lateral ul a {
+  display: flex;
+  align-items: center; 
+  text-decoration: none; 
+  color: white; 
+  margin: 10px 0; 
+  padding: 10px; 
+  transition: background-color 0.3s ease;
+}
+
+.barra-lateral ul a:hover {
+  background-color: #3a3a3a;
+  border-radius: 1rem; 
+}
+
+.barra-lateral ul a i {
+  margin-right: 10px;
+  padding: 10px;
+}
+
+.barra-lateral ul a p {
+  margin: 0; 
+  font-size: 18px; 
+}
+
+
+.contenido {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 15px 20px;
+  padding-left: 250px;
+}
+
+.contenido h2 {
+  padding: 15px 20px;
+  padding-left: 75px;
+}
+
+.mensaje-crear {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 20px 0;
+}
+
+/* Pendientes */
+.pendientes-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 900px;
+  margin-left: 50px;
+}
+
+.pendiente {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pendiente:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.terminado {
+  background-color: rgba(86, 135, 80, 1);
+  color: white;
+}
+
+.en-proceso {
+  background-color: #90a4ae;
+  color: white;
+}
+
+.por-vencer {
+  background-color: rgba(171, 45, 40, 1);
+  color: white;
+}
+
+.icono {
+  margin-right: 10px;
+}
+
+/* Estilos del checkbox */
+.container {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  font-size: 1.5rem;
+  user-select: none;
+  margin-right: 10px;
+}
+
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  --clr: #0B6E4F;
+  position: relative;
+  height: 1.3em;
+  width: 1.3em;
+  background-color: #ccc;
+  border-radius: 50%;
+  transition: 300ms;
+}
+
+.container input:checked ~ .checkmark {
+  background-color: var(--clr);
+  border-radius: 0.5rem;
+  animation: pulse 500ms ease-in-out;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.container .checkmark:after {
+  left: 0.45em;
+  top: 0.25em;
+  width: 0.25em;
+  height: 0.5em;
+  border: solid #E0E0E2;
+  border-width: 0 0.15em 0.15em 0;
+  transform: rotate(45deg);
+}
+
+@keyframes pulse {
+  0% {
       box-shadow: 0 0 0 #0B6E4F90;
       rotate: 20deg;
-    }
-
-    50% {
+  }
+  50% {
       rotate: -20deg;
-    }
-
-    75% {
+  }
+  75% {
       box-shadow: 0 0 0 10px #0B6E4F60;
-    }
-
-    100% {
+  }
+  100% {
       box-shadow: 0 0 0 13px #0B6E4F30;
       rotate: 0;
-    }
   }
+}
 
-  /* Ocultar los íconos cuando el checkbox está marcado */
-  .terminado .checkbox:checked ~ .icono {
-    display: none;
-  }
+.terminado .checkbox:checked ~ .icono {
+  display: none;
+}
 
-  .en-proceso .checkbox:checked ~ .icono {
-    display: none;
-  }
+.en-proceso .checkbox:checked ~ .icono {
+  display: none;
+}
 
-  .por-vencer .checkbox:checked ~ .icono {
-    display: none;
-  }
+.por-vencer .checkbox:checked ~ .icono {
+  display: none;
+}
 
-  
+
+
+.pendientes-columns {
+  padding: 40px;
+  display: flex;
+  justify-content: center; 
+  gap: 20px; 
+  width: 100%;
+  max-width: 1200px; 
+  margin: 0 auto; 
+}
+
+.pendientes-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 30%; 
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #333; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  margin: 15px;
+  padding: 20px;
+}
+
+.pendientes-lista h3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 10px;
+}
+
+
+h3{
+  text-align: center;
+}

@@ -1,0 +1,172 @@
+/* General */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #1f1f1f;
+    color: white;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .contenedor {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
+  
+  /* Barra superior */
+  .barra-superior {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #2c2c2c;
+    padding: 15px 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+  }
+  
+  .menu-icono {
+    width: 25px;
+    height: 25px;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iMjUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGxpbmUgeDE9IjAiIHkxPSI1IiB4Mj0iMjUiIHkyPSI1IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjMiLz48bGluZSB4MT0iMCIgeTE9IjEyLjUiIHgyPSIyNSIgeTI9IjEyLjUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMyIvPjxsaW5lIHgxPSIwIiB5MT0iMjAiIHgyPSIyNSIgeTI9IjIwIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjMiLz48L3N2Zz4='); 
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+  }
+  
+  .titulo {
+    font-size: 20px;
+    font-weight: bold;
+    color: #09a7b3;
+  }
+/* Barra lateral */
+.barra-lateral {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #2c2c2c;
+    padding: 20px;
+    transition: left 0.3s ease;
+    z-index: 999;
+}
+
+.barra-lateral.mostrar {
+    left: 0;
+}
+
+.barra-lateral .cerrar {
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.barra-lateral ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.barra-lateral ul li {
+    padding: 10px 0;
+    margin: 20px 0;
+    cursor: pointer;
+}
+
+.barra-lateral ul a {
+    display: flex; 
+    align-items: center;
+    text-decoration: none; 
+    color: white; 
+    margin: 5px 0; 
+    padding: 5px; 
+    transition: background-color 0.3s ease;
+}
+
+.barra-lateral ul a:hover {
+    background-color: #3a3a3a;
+    border-radius: 1rem; 
+}
+
+.barra-lateral ul a i {
+    margin-right: 10px;
+    padding: 10px;
+}
+
+.barra-lateral ul a p {
+    margin: 0; 
+    font-size: 18px; 
+}
+
+/* Perfil */
+.perfil-container {
+    position: relative;
+    text-align: center;
+    max-width: 700px;
+    margin: 25px;
+    background: #2c2c2c;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    left: 450px;
+}
+
+.perfil-container h2 {
+    text-align: center;
+    color: #09a7b3;
+}
+
+.form-item {
+    margin-bottom: 15px;
+    padding: 20px;
+}
+
+.form-item input,
+.form-item textarea,
+.form-item select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form-item textarea {
+    resize: horizontal;
+}
+
+.btn-submit {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #09a7b3;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    background-color: #449190;
+}
+
+label{
+    font-size: large;
+}
+
+input, textarea, select{
+    background-color: #3a3a3a;
+    color: white;
+}

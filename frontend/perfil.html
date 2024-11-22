@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil</title>
+  <link rel="stylesheet" href="perfil.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="contenedor">
+    <!-- Barra superior -->
+    <div class="barra-superior">
+      <div class="menu-icono" id="menu-icono"></div>
+      <div class="titulo">To-Do List</div>
+    </div>
+
+    <!-- Barra lateral -->
+    <div class="barra-lateral" id="barra-lateral">
+        <div class="cerrar" id="cerrar-lateral">&times;</div>
+        <ul>
+            <li><a href="tareas.html"><i class="fas fa-home"style="font-size: 30px;"></i><p>Inicio</p></a></li>
+            <li><a href="calendario.html"><i class="fa-regular fa-calendar"style="font-size: 30px;"></i><p>Calendario</p></a></li>
+            <li><a href="todo_test.html"><i class="fa-solid fa-plus"style="font-size: 30px;"></i><p>Crear</p></a></li>
+        </ul>
+    </div>
+    
+    <div class="perfil-container">
+            <h2>Perfil</h2>
+            <form id="perfil-form">
+                
+                <div class="form-item">
+                    <label for="nombreUsuario">Nombre de Usuario:</label>
+                    <input type="text" id="nombreUsuario" name="nombreUsuario" placeholder="Ingresa tu nombre de usuario" required>
+                </div>
+                <div class="form-item">
+                    <label for="biografia">Biografía:</label>
+                    <textarea id="biografia" name="biografia"  placeholder="Escribe algo sobre ti"></textarea>
+                </div>
+        
+                
+                <div class="form-item">
+                    <label for="correo">Correo Electrónico:</label>
+                    <input type="email" id="correo" name="correo" placeholder="Ingresa tu correo electrónico" required>
+                </div>
+                <div class="form-item">
+                    <label for="telefono">Teléfono:</label>
+                    <input type="tel" id="telefono" name="telefono" placeholder="Ingresa tu número de teléfono">
+                </div>
+                
+                <div class="form-item">
+                    <label for="estadoCuenta">Estado de la Cuenta:</label>
+                    <select id="estadoCuenta" name="estadoCuenta">
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                        <option value="Suspendido">Suspendido</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <label for="privacidad">Privacidad:</label>
+                    <select id="privacidad" name="privacidad">
+                        <option value="Publico">Público</option>
+                        <option value="Privado">Privado</option>
+                    </select>
+                </div>
+        
+                
+                <button type="submit" class="btn-submit">Guardar Perfil</button>
+            </form>
+        </div>
+        
+        <script>
+            
+            document.getElementById('perfil-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                alert('Perfil guardado exitosamente.');
+            });
+        </script>
+  <script src="frontmain.js">
+  </script>
+</body>
+</html>
