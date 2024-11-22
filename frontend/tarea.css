@@ -144,4 +144,93 @@
   .icono {
     margin-right: 10px;
   }
+  /* Estilos del checkbox */
+  .container {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    font-size: 1.5rem;
+    user-select: none;
+    margin-right: 10px; /* Espaciado entre checkbox e ícono */
+  }
+
+  .container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  /* Estilo del círculo del checkbox */
+  .checkmark {
+    --clr: #0B6E4F;
+    position: relative;
+    height: 1.3em;
+    width: 1.3em;
+    background-color: #ccc;
+    border-radius: 50%;
+    transition: 300ms;
+  }
+
+  .container input:checked ~ .checkmark {
+    background-color: var(--clr);
+    border-radius: 0.5rem;
+    animation: pulse 500ms ease-in-out;
+  }
+
+  /* Checkmark dentro del círculo */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  .container input:checked ~ .checkmark:after {
+    display: block;
+  }
+
+  .container .checkmark:after {
+    left: 0.45em;
+    top: 0.25em;
+    width: 0.25em;
+    height: 0.5em;
+    border: solid #E0E0E2;
+    border-width: 0 0.15em 0.15em 0;
+    transform: rotate(45deg);
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 #0B6E4F90;
+      rotate: 20deg;
+    }
+
+    50% {
+      rotate: -20deg;
+    }
+
+    75% {
+      box-shadow: 0 0 0 10px #0B6E4F60;
+    }
+
+    100% {
+      box-shadow: 0 0 0 13px #0B6E4F30;
+      rotate: 0;
+    }
+  }
+
+  /* Ocultar los íconos cuando el checkbox está marcado */
+  .terminado .checkbox:checked ~ .icono {
+    display: none;
+  }
+
+  .en-proceso .checkbox:checked ~ .icono {
+    display: none;
+  }
+
+  .por-vencer .checkbox:checked ~ .icono {
+    display: none;
+  }
+
   
