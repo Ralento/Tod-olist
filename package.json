@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/Ralento/Todolist#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "ejs": "^3.1.10",
     "express": "^4.21.1",
     "mysql2": "^3.11.4",
     "node.js": "^0.0.1-security",
