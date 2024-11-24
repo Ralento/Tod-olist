@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index.js",
     "test": "test"
   },
   "repository": {
@@ -17,7 +18,9 @@
   },
   "homepage": "https://github.com/Ralento/Todolist#readme",
   "dependencies": {
+    "express": "^4.21.1",
     "mysql2": "^3.11.4",
-    "node.js": "^0.0.1-security"
+    "node.js": "^0.0.1-security",
+    "nodemon": "^3.1.7"
   }
 }
