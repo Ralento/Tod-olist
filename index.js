@@ -29,26 +29,30 @@ app.get('/', (req, res) => {
     res.render('login');
 });
 
-app.post('/login ', (req, res) => {
+app.post('/login', (req, res) => {
   const { user, password } = req.body;
-  pool.query('SELECT id FROM usuarios WHERE usuario = $1 AND contraseña = $2', [user, password])
+  console.log('Datos enviados por el formulario:', user, password); // Muestra los datos enviados
+  pool.query('SELECT * FROM usuarios WHERE usuario = $1 AND contraseña = $2', [user, password])
     .then((data) => {
+      console.log('Datos del usuario encontrado:', data.rows); // Muestra los resultados de la consulta
       if (data.rows.length > 0) {
         req.session.user = user;
-        req.session.user_id = data.rows[0].id; // Almacena el ID del usuario en la sesión
-        console.log('Usuario autenticado, ID:', req.session.user_id);
+        req.session.user_id = data.rows[0].usuario_id; // Cambia aquí si la columna es diferente
+        console.log('Usuario autenticado, ID:', req.session.user_id); // Muestra el ID en la sesión
         res.redirect('/tareas');
       } else {
+        console.log('No se encontraron coincidencias para el usuario y contraseña');
         res.render('login', { mensaje: 'Usuario o contraseña incorrectos.' });
       }
     })
     .catch((error) => {
-      console.error('Error al realizar la consulta:', error);
+      console.error('Error al realizar la consulta:', error); // Muestra cualquier error SQL
       res.render('login', { mensaje: 'Error al iniciar sesión.' });
     });
 });
 
-app.post('/register', (req, res) => {
+
+app.post('/register', async (req, res) => {
     const { name, phone, user, password } = req.body;
     pool.query('INSERT INTO usuarios (nombre, telefono, usuario, contraseña) VALUES ($1, $2, $3, $4)', [name, phone, user, password])
         .then(data => {
@@ -60,15 +64,14 @@ app.post('/register', (req, res) => {
         });
 });
 
-app.get('/tareas', (req, res) => {
+app.get('/tareas', async(req, res) => {
   if (!req.session.user) {
       return res.redirect('/');
   }
 
-  const userId = req.session.user_id; // Asegúrate de que el user_id se almacene en la sesión al iniciar sesión
+  const userId = req.session.user_id;
 
-  pool.query('SELECT * FROM tareas WHERE usuario_asignado_id = $1 ORDER BY prioridad ASC', [userId])
-      .then(data => {
+pool.query('SELECT * FROM tareas WHERE usuario_asignado_id = $1 ORDER BY prioridad ASC', [userId]).then(data => {
           const tareas = data.rows;
           if (tareas.length === 0) {
               return res.render('tareas', { mensaje: 'No hay tareas registradas.', tareas: [] });
@@ -81,7 +84,7 @@ app.get('/tareas', (req, res) => {
       });
 });
 
-app.post('/crear-tarea', (req, res) => {
+app.post('/crear-tarea', async(req, res) => {
   const { descripcion, estado, prioridad } = req.body;
   const userid = req.session.user_id; // Asegúrate de que el usuario esté autenticado
 
