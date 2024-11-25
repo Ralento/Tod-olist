@@ -23,7 +23,7 @@
             <i class="fas fa-home" style="font-size: 30px;"></i>
             <p>Inicio</p>
         </a>
-        <a href="/crear">
+        <a href="/crear-tarea">
             <i class="fa-solid fa-plus" style="font-size: 30px;"></i>
             <p>Crear</p>
         </a>
@@ -32,20 +32,16 @@
             <p>Perfil</p>
         </a>
     </ul>
-</div>
+  </div>
 
-
-  
+  <!-- Contenido -->
   <div class="contenido">
     <h2 class="titulo-calendario">Calendario</h2>
     <div id="calendario"></div>
   </div>
 
-
-  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.js"></script>
   <script>
-    
     function mostrarMenu() {
       document.getElementById('barraLateral').classList.add('mostrar');
     }
@@ -54,7 +50,6 @@
       document.getElementById('barraLateral').classList.remove('mostrar');
     }
 
-    
     document.addEventListener('DOMContentLoaded', function () {
       const calendarEl = document.getElementById('calendario');
       const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -72,17 +67,13 @@
           day: 'Día'
         },
         events: [
-          {
-            title: 'Evento de prueba',
-            start: '2024-11-25',
-            end: '2024-11-27',
-            color: '#09a7b3' 
-          },
-          {
-            title: 'Otro evento',
-            start: '2024-11-30',
-            color: '#f45b5b'
-          }
+           tareas.forEach((tarea, index) => {
+            {
+              title: "<%= tarea.descripcion %>"; // Nombre de la tarea
+              start: "<%= tarea.fecha_vencimiento %>"; // Fecha de vencimiento
+              color: '<%= tarea.estado === "terminado" ? "#28a745" : "#ffc107" %>' // Verde si está terminada, amarillo si no
+            }
+          })
         ]
       });
       calendar.render();

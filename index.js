@@ -137,31 +137,49 @@ app.get('/crear', (req, res) => {
 });
 
 app.post('/crear-tarea', async (req, res) => {
-  const { descripcion, estado, prioridad } = req.body;
-  const userid = req.session.user_id; // Asegúrate de que el usuario esté autenticado
+  const { descripcion, estado, prioridad, fecha } = req.body; // Asegúrate de enviar la fecha desde el formulario
+  const userId = req.session.user_id;
 
-  console.log('Descripción:', descripcion);
-  console.log('Estado:', estado);
-  console.log('Prioridad:', prioridad);
-  console.log('ID de Usuario:', userid);
-
-  if (!userid) {
-      return res.status(403).send('No estás autorizado para crear tareas.');
+  if (!userId) {
+    return res.status(403).send('No estás autorizado para crear tareas.');
   }
 
-  pool.query('INSERT INTO tareas (descripcion, estado, prioridad, fecha_creacion, usuario_asignado_id) VALUES ($1, $2, $3, NOW(), $4)', 
-  [descripcion, estado, prioridad, userid])
-  .then(data => {
-      res.redirect('/tareas'); // Redirige a la lista de tareas después de crear
-  })
-  .catch(error => {
-      console.log(error);
-      res.render('crear', { mensaje : 'Error al crear la tarea. Inténtalo de nuevo.' });
-  });
+  try {
+    // Insertar la tarea
+    const tareaResult = await pool.query(
+      'INSERT INTO tareas (descripcion, estado, prioridad, fecha_creacion, usuario_asignado_id) VALUES ($1, $2, $3, NOW(), $4) RETURNING tarea_id',
+      [descripcion, estado, prioridad, userId]
+    );
+
+    const tareaId = tareaResult.rows[0].tarea_id;
+
+    // Insertar en el calendario
+    await pool.query(
+      'INSERT INTO calendario (tarea_id, fecha, usuario_id) VALUES ($1, $2, $3)',
+      [tareaId, fecha, userId]
+    );
+
+    res.redirect('/tareas');
+  } catch (error) {
+    console.error('Error al crear la tarea:', error);
+    res.render('crear', { mensaje: 'Error al crear la tarea. Inténtalo de nuevo.' });
+  }
 });
 
-app.get('/calendario', (req, res) => {
-  res.render('calendario');
+
+app.get('/calendario', async (req, res) => {
+  const userId = req.session.user_id;
+
+  try {
+      const tareas = await pool.query(
+          'SELECT descripcion, fecha_vencimiento, estado FROM tareas WHERE usuario_asignado_id = $1',
+          [userId]
+      );
+      res.render('calendario', { tareas: tareas.rows });
+  } catch (error) {
+      console.error('Error al cargar tareas:', error);
+      res.render('calendario', { tareas: [] });
+  }
 });
 
 app.get('/perfil', (req, res) => {
