@@ -84,6 +84,58 @@ pool.query('SELECT * FROM tareas WHERE usuario_asignado_id = $1 ORDER BY priorid
       });
 });
 
+
+app.post('/actualizar-tarea', async (req, res) => {
+  const { id, estado, fechaVencimiento } = req.body;
+
+  try {
+    // Verificamos si se está cambiando el estado a 'en-proceso' o 'terminado'
+    let query = 'UPDATE tareas SET estado = $1';
+    let values = [estado];
+
+    // Si la tarea se marca como terminada, actualizamos la fecha_vencimiento
+    if (estado === 'terminado' && fechaVencimiento) {
+      query += ', fecha_vencimiento = $2';
+      values.push(fechaVencimiento); // La fecha de vencimiento será la fecha actual
+    }
+
+    query += ' WHERE tarea_id = $3';
+    values.push(id);
+
+    // Ejecutamos la consulta
+    await pool.query(query, values);
+
+    // Redirigimos a la lista de tareas
+    res.redirect('/tareas');
+  } catch (error) {
+    console.error('Error al actualizar la tarea:', error);
+    res.redirect('/tareas');
+  }
+});
+
+
+// Ruta para eliminar una tarea
+app.post('/eliminar-tarea', async (req, res) => {
+  const { id } = req.body;
+
+  try {
+    // Ejecutamos la consulta para eliminar la tarea por su ID
+    await pool.query('DELETE FROM tareas WHERE tarea_id = $1', [id]);
+
+    // Redirigimos a la lista de tareas después de eliminar
+    res.redirect('/tareas');
+  } catch (error) {
+    console.error('Error al eliminar la tarea:', error);
+    res.redirect('/tareas');
+  }
+});
+
+
+
+app.get('/crear', (req, res) => {
+  res.render('crear');
+});
+
 app.post('/crear-tarea', async (req, res) => {
   const { descripcion, estado, prioridad } = req.body;
   const userid = req.session.user_id; // Asegúrate de que el usuario esté autenticado
@@ -112,13 +164,44 @@ app.get('/calendario', (req, res) => {
   res.render('calendario');
 });
 
-app.get('/crear', (req, res) => {
-  res.render('crear');
+app.get('/perfil', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/');
+  }
+
+  const userId = req.session.user_id;
+
+  pool.query('SELECT nombre, usuario, contraseña, descripcion, telefono FROM usuarios WHERE usuario_id = $1', [userId])
+    .then(data => {
+      if (data.rows.length > 0) {
+        res.render('perfil', { user: data.rows[0] });
+      } else {
+        res.redirect('/'); // Si no se encuentra el usuario, redirige al inicio
+      }
+    })
+    .catch(error => {
+      console.error('Error al obtener datos del perfil:', error);
+      res.redirect('/');
+    });
 });
 
-app.get('/perfil', (req, res) => {
-  res.render('perfil');
+app.post('/perfil', (req, res) => {
+  const { name, user, password, description, tel } = req.body;
+  const userId = req.session.user_id;
+
+  pool.query(
+    'UPDATE usuarios SET nombre = $1, usuario = $2, contraseña = $3, descripcion = $4, telefono = $5 WHERE usuario_id = $6',
+    [name, user, password, description, tel, userId]
+  )
+    .then(() => {
+      res.redirect('/perfil'); // Redirige a la vista del perfil actualizado
+    })
+    .catch(error => {
+      console.error('Error al actualizar el perfil:', error);
+      res.render('perfil', { mensaje: 'Error al actualizar los datos.', user: req.body });
+    });
 });
+
 
 
 app.listen(7000 , () => {

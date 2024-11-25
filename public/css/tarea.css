@@ -287,6 +287,30 @@ body {
   margin-bottom: 10px;
 }
 
+/* Estilo del botón Eliminar */
+.btn-delete {
+  background-color: #f44336; /* Rojo para indicar eliminación */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-left: 10px;
+  display: inline-block;
+}
+
+.btn-delete:hover {
+  background-color: #d32f2f; /* Un tono más oscuro de rojo */
+  transform: scale(1.05);
+}
+
+.btn-delete:active {
+  transform: scale(0.95);
+}
+
 
 h3{
   text-align: center;

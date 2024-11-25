@@ -1,54 +1,106 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/todo_test.css"> <!-- Asegúrate de que la ruta sea correcta -->
-    <title>Crear Tarea</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <link rel="stylesheet" href="css/todo_test.css"> <!-- Ajusta la ruta si es necesario -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="contenedor">
-        <div class="barra-superior">
-            <div class="titulo">Crear Tarea</div>
-            <div id="menu-icono" class="menu-icono"></div>
-        </div>
-        
-        <div class="barra-lateral" id="barra-lateral">
-            <span class="cerrar" id="cerrar-lateral">&times;</span>
-            <ul>
-                <li><a href="/tareas">Tareas</a></li>
-                <li><a href="/perfil">Perfil</a></li>
-                <li><a href="/calendario">Calendario</a></li>
-            </ul>
-        </div>
+  <div class="contenedor">
+    <!-- Barra superior -->
+    <header class="barra-superior">
+      <div id="menu-icono" class="menu-icono" onclick="toggleSidebar()"></div>
+      <h1 class="titulo">To-Do List</h1>
+    </header>
 
-        <div class="contenido">
-            <form action="/crear-tarea" method="POST">
-                <div class="form-item">
-                    <label for="descripcion">Descripción:</label>
-                    <input type="text" id="descripcion" name="descripcion" required>
-                </div>
-                <div class="form-item">
-                    <label for="estado">Estado:</label>
-                    <select id="estado" name="estado" required>
-                        <option value="pendiente">Pendiente</option>
-                        <option value="en_proceso">En Proceso</option>
-                        <option value="terminado">Terminado</option>
-                    </select>
-                </div>
-                <div class="form-item">
-                    <label for="prioridad">Prioridad:</label>
-                    <select id="prioridad" name="prioridad" required>
-                        <option value="baja">Baja</option>
-                        <option value="media">Media</option>
-                        <option value="alta">Alta</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-submit">Crear Tarea</button>
-            </form>
-        </div>
+    <!-- Barra lateral -->
+    <div class="barra-lateral oculto" id="barra-lateral">
+      <span class="cerrar" id="cerrar-lateral" onclick="toggleSidebar()">&times;</span>
+      <ul>
+        <li><a href="/tareas"><i class="fas fa-home" style="font-size: 30px;"></i><p>Tareas</p></a></li>
+        <li><a href="/perfil"><i class="fa-regular fa-user" style="font-size: 30px;"></i><p>Perfil</p></a></li>
+        <li><a href="/calendario"><i class="fa-regular fa-calendar" style="font-size: 30px;"></i><p>Calendario</p></a></li>
+      </ul>
     </div>
 
-    <script src="/js/frontmain.js"></script> <!-- Asegúrate de que la ruta sea correcta -->
+    <!-- Contenido principal -->
+    <main class="contenido">
+      <div class="icono-usuario"></div>
+      <h2 class="mensaje-crear">Crea un pendiente</h2>
+
+      <div class="crear-pendiente">
+        <button class="Btn" onclick="openModal()"> 
+          <div class="sign">+</div>
+          <div class="text">Nueva Tarea</div>
+        </button>
+      </div>
+
+      <div id="modal-form" class="modal oculto">
+        <div class="formulario">
+          <div class="form-header">
+            <h2>Nuevo Proyecto</h2>
+            <span class="cerrar-form" onclick="closeModal()" style="cursor: pointer;">X</span>
+          </div>
+      
+          <!-- Formulario de creación de tarea -->
+          <form action="/crear-tarea" method="POST">
+            <div class="form-item">
+              <label for="descripcion">Descripción:</label>
+              <input type="text" id="descripcion" name="descripcion" placeholder="Ingresa la descripción" required>
+            </div>
+            <div class="form-item">
+              <label for="estado">Estado:</label>
+              <select id="estado" name="estado" required>
+                <option value="pendiente">Pendiente</option>
+                <option value="en-proceso">En Proceso</option>
+                <option value="terminado">Terminado</option>
+              </select>
+            </div>
+            <div class="form-item">
+              <label for="prioridad">Prioridad:</label>
+              <select id="prioridad" name="prioridad" required>
+                <option value="baja">Baja</option>
+                <option value="media">Media</option>
+                <option value="alta">Alta</option>
+              </select>
+            </div>
+            <div class="form-item">
+              <label for="fecha">Fecha del proyecto:</label>
+              <input type="date" id="fecha" name="fecha" required>
+            </div>
+            <button type="submit" class="btn-submit">Crear Tarea</button>
+          </form>
+        </div>
+      </div>
+      
+  <!-- Script -->
+  <script>
+    // Mostrar/Ocultar barra lateral
+    const toggleSidebar = () => {
+      const barraLateral = document.getElementById("barra-lateral");
+      barraLateral.classList.toggle("mostrar");
+    };
+
+    // Modal para crear tareas/proyectos
+    const openModal = () => {
+      const formularioModal = document.getElementById("modal-form");
+      formularioModal.style.display = "flex";
+    };
+
+    const closeModal = () => {
+      const formularioModal = document.getElementById("modal-form");
+      formularioModal.style.display = "none";
+    };
+
+    // Cerrar modal al hacer clic fuera de él
+    window.addEventListener("click", (event) => {
+      const formularioModal = document.getElementById("modal-form");
+      if (event.target === formularioModal) {
+        formularioModal.style.display = "none";
+      }
+    });
+  </script>
 </body>
 </html>
