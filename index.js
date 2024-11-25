@@ -28,15 +28,15 @@ app.use(session({
 app.get('/', (req, res) => {
     res.render('login');
 });
-app.post('/login', (req, res) => {
+
+app.post('/login ', (req, res) => {
   const { user, password } = req.body;
-  pool.query('SELECT * FROM usuarios WHERE usuario = $1 AND contraseña = $2', [user, password])
+  pool.query('SELECT id FROM usuarios WHERE usuario = $1 AND contraseña = $2', [user, password])
     .then((data) => {
-      console.log('Datos del usuario encontrado:', data.rows); // Muestra el resultado de la consulta
       if (data.rows.length > 0) {
         req.session.user = user;
-        req.session.user_id = data.rows[0].id; // Captura el ID
-        console.log('Usuario autenticado, ID:', req.session.user_id); // Log del ID
+        req.session.user_id = data.rows[0].id; // Almacena el ID del usuario en la sesión
+        console.log('Usuario autenticado, ID:', req.session.user_id);
         res.redirect('/tareas');
       } else {
         res.render('login', { mensaje: 'Usuario o contraseña incorrectos.' });
@@ -83,19 +83,19 @@ app.get('/tareas', (req, res) => {
 
 app.post('/crear-tarea', (req, res) => {
   const { descripcion, estado, prioridad } = req.body;
-  const userId = req.session.user_id; // Asegúrate de que el usuario esté autenticado
+  const userid = req.session.user_id; // Asegúrate de que el usuario esté autenticado
 
   console.log('Descripción:', descripcion);
   console.log('Estado:', estado);
   console.log('Prioridad:', prioridad);
-  console.log('ID de Usuario:', userId);
+  console.log('ID de Usuario:', userid);
 
-  if (!userId) {
+  if (!userid) {
       return res.status(403).send('No estás autorizado para crear tareas.');
   }
 
   pool.query('INSERT INTO tareas (descripcion, estado, prioridad, fecha_creacion, usuario_asignado_id) VALUES ($1, $2, $3, NOW(), $4)', 
-  [descripcion, estado, prioridad, userId])
+  [descripcion, estado, prioridad, userid])
   .then(data => {
       res.redirect('/tareas'); // Redirige a la lista de tareas después de crear
   })
