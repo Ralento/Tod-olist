@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lista de Pendientes</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/tarea.css">
+  <link rel="stylesheet" href="/css/tarea.css">
 </head>
 <body>
   <div class="contenedor">
@@ -19,58 +19,64 @@
     <div class="barra-lateral" id="barra-lateral">
       <div class="cerrar" id="cerrar-lateral">&times;</div>
       <ul>
-        <li><a href="calendario.html"><i class="fa-regular fa-calendar"style="font-size: 30px;"></i><p>Calendario</p></a></li>
-        <li><a href="todo_test.html"><i class="fa-solid fa-plus"style="font-size: 30px;"></i><p>Crear</p></a></li>
-        <li><a href="Perfil.html"><i class="fa-regular fa-user"style="font-size: 30px;"></i><p>Perfil</p></a></li>
+        <li><a href="/calendario"><i class="fa-regular fa-calendar"style="font-size: 30px;"></i><p>Calendario</p></a></li>
+        <li><a href="/crear"><i class="fa-solid fa-plus"style="font-size: 30px;"></i><p>Crear</p></a></li>
+        <li><a href="/perfil"><i class="fa-regular fa-user"style="font-size: 30px;"></i><p>Perfil</p></a></li>
       </ul>
     </div>
 
-    
     <div class="contenido">
-      
-      
       <div class="pendientes-columns">
         
         <div class="pendientes-lista">
-          <h3>Importantes</h3> 
-          <div class="pendiente por-vencer">
-            <label class="container">
-              <input type="checkbox" class="checkbox">
-              <div class="checkmark"></div>
-            </label>
-            <span class="icono"></span> Por Vencer/Importante
-          </div>
+          <h3>Pendientes</h3>
+          <% tareas.forEach(tarea => { %>
+            <% if (tarea.estado === 'pendiente') { %>
+              <div class="pendiente por-vencer">
+                <label class="container">
+                  <input type="checkbox" class="checkbox">
+                  <div class="checkmark"></div>
+                </label>
+                <span class="icono"></span> <%= tarea.descripcion %>
+              </div>
+            <% } %>
+          <% }); %>
         </div>
 
-        
         <div class="pendientes-lista">
-          <h3>Pendientes</h3> 
-          <div class="pendiente en-proceso">
-            <label class="container">
-              <input type="checkbox" class="checkbox">
-              <div class="checkmark"></div>
-            </label>
-            <span class="icono"></span> En Proceso
-          </div>
+          <h3>En Proceso</h3>
+          <% tareas.forEach(tarea => { %>
+            <% if (tarea.estado === 'en-proceso') { %>
+              <div class="pendiente en-proceso">
+                <label class="container">
+                  <input type="checkbox" class="checkbox">
+                  <div class="checkmark"></div>
+                </label>
+                <span class="icono"></span> <%= tarea.descripcion %>
+              </div>
+            <% } %>
+          <% }); %>
         </div>
 
-       
         <div class="pendientes-lista">
-          <h3>Terminado</h3> 
-          <div class="pendiente terminado">
-            <label class="container">
-              <input type="checkbox" class="checkbox" checked="checked"> 
-              <div class="checkmark"></div>
-            </label>
-            <span class="icono"></span> Terminado
-          </div>
+          <h3>Terminado</h3>
+          <% tareas.forEach(tarea => { %>
+            <% if (tarea.estado === 'terminado') { %>
+              <div class="pendiente terminado">
+                <label class="container">
+                  <input type="checkbox" class="checkbox" checked="checked"> 
+                  <div class="checkmark"></div>
+                </label>
+                <span class="icono"></span> <%= tarea.descripcion %>
+              </div>
+            <% } %>
+          <% }); %>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    
     const menuIcono = document.getElementById('menu-icono');
     const barraLateral = document.getElementById('barra-lateral');
     const cerrarLateral = document.getElementById('cerrar-lateral');
@@ -83,5 +89,4 @@
       barraLateral.classList.remove('mostrar');
     });
   </script>
-</body>
-</html>
+</

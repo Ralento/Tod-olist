@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/todo_test.css"> <!-- Asegúrate de que la ruta sea correcta -->
+    <title>Crear Tarea</title>
+</head>
+<body>
+    <div class="contenedor">
+        <div class="barra-superior">
+            <div class="titulo">Crear Tarea</div>
+            <div id="menu-icono" class="menu-icono"></div>
+        </div>
+        
+        <div class="barra-lateral" id="barra-lateral">
+            <span class="cerrar" id="cerrar-lateral">&times;</span>
+            <ul>
+                <li><a href="/tareas">Tareas</a></li>
+                <li><a href="/perfil">Perfil</a></li>
+                <li><a href="/calendario">Calendario</a></li>
+            </ul>
+        </div>
+
+        <div class="contenido">
+            <form action="/crear-tarea" method="POST">
+                <div class="form-item">
+                    <label for="descripcion">Descripción:</label>
+                    <input type="text" id="descripcion" name="descripcion" required>
+                </div>
+                <div class="form-item">
+                    <label for="estado">Estado:</label>
+                    <select id="estado" name="estado" required>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="en_proceso">En Proceso</option>
+                        <option value="terminado">Terminado</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <label for="prioridad">Prioridad:</label>
+                    <select id="prioridad" name="prioridad" required>
+                        <option value="baja">Baja</option>
+                        <option value="media">Media</option>
+                        <option value="alta">Alta</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit">Crear Tarea</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/frontmain.js"></script> <!-- Asegúrate de que la ruta sea correcta -->
+</body>
+</html>
