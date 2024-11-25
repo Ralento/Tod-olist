@@ -118,11 +118,6 @@ app.get('/perfil', (req, res) => {
 });
 
 
-
-
-
-
-
 app.listen(7000 , () => {
     console.log('Server is running on port lhttp://localhost:7000');
 });
