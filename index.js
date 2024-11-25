@@ -53,10 +53,10 @@ app.post('/login', (req, res) => {
 
 
 app.post('/register', async (req, res) => {
-    const { name, phone, user, password } = req.body;
-    pool.query('INSERT INTO usuarios (nombre, telefono, usuario, contraseña) VALUES ($1, $2, $3, $4)', [name, phone, user, password])
+    const { name, tel, user, password } = req.body;
+    pool.query('INSERT INTO usuarios (nombre, telefono, usuario, contraseña) VALUES ($1, $2, $3, $4)', [name, tel, user, password])
         .then(data => {
-            res.redirect('/login');
+            res.redirect('/');
         })
         .catch(error => {
             console.log(error);
@@ -84,7 +84,7 @@ pool.query('SELECT * FROM tareas WHERE usuario_asignado_id = $1 ORDER BY priorid
       });
 });
 
-app.post('/crear-tarea', async(req, res) => {
+app.post('/crear-tarea', async (req, res) => {
   const { descripcion, estado, prioridad } = req.body;
   const userid = req.session.user_id; // Asegúrate de que el usuario esté autenticado
 
