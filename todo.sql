@@ -186,7 +186,7 @@ Testing de la base 	pendiente	alta	2024-11-24	\N	1	13
 --
 
 COPY public.usuarios (nombre, usuario, telefono, "contraseña", usuario_id, descripcion) FROM stdin;
-Roy Bernal Ibarra	Ralento.mvk	4494575413	rollo200726	1	ou che
+Roy Bernal Ibarra	Ralentomvk	4494575413	rollo200726	1	ou che
 Filis Embriz Pozos 	Filis	4495411077	12345	8	\N
 Filis Embriz Pozos 	Filis	4495411077	1234	9	\N
 \.
