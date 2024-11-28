@@ -6,7 +6,7 @@ const { Pool } = require('pg');
 const pool = new Pool({
   host: 'localhost',
   user: 'postgres',
-  password: 'rollo200726',
+  password: '12345678',
   database: 'todo',
   port: 5432
 });
@@ -89,29 +89,28 @@ app.post('/actualizar-tarea', async (req, res) => {
   const { id, estado, fechaVencimiento } = req.body;
 
   try {
-    // Verificamos si se está cambiando el estado a 'en-proceso' o 'terminado'
-    let query = 'UPDATE tareas SET estado = $1';
-    let values = [estado];
+    if (estado === 'en-proceso') {
+      // Cambiar el estado de 'pendiente' a 'en-proceso'
+      const queryPendienteAProceso = 'UPDATE tareas SET estado = $1 WHERE tarea_id = $2';
+      const valuesPendienteAProceso = ['en-proceso', id];
+      await pool.query(queryPendienteAProceso, valuesPendienteAProceso);
 
-    // Si la tarea se marca como terminada, actualizamos la fecha_vencimiento
-    if (estado === 'terminado' && fechaVencimiento) {
-      query += ', fecha_vencimiento = $2';
-      values.push(fechaVencimiento); // La fecha de vencimiento será la fecha actual
+    } else if (estado === 'terminado') {
+      // Cambiar el estado de 'en-proceso' a 'terminado' y actualizar la fecha de vencimiento
+      const queryProcesoATerminado = 'UPDATE tareas SET estado = $1, fecha_vencimiento = $2 WHERE tarea_id = $3';
+      const fecha = fechaVencimiento ? new Date(fechaVencimiento) : new Date(); // Si no se pasa una fecha, asignamos la fecha actual
+      const valuesProcesoATerminado = ['terminado', fecha.toISOString(), id];
+      await pool.query(queryProcesoATerminado, valuesProcesoATerminado);
     }
 
-    query += ' WHERE tarea_id = $3';
-    values.push(id);
-
-    // Ejecutamos la consulta
-    await pool.query(query, values);
-
-    // Redirigimos a la lista de tareas
+    // Redirigir a la lista de tareas
     res.redirect('/tareas');
   } catch (error) {
     console.error('Error al actualizar la tarea:', error);
     res.redirect('/tareas');
   }
 });
+
 
 
 // Ruta para eliminar una tarea
@@ -129,7 +128,6 @@ app.post('/eliminar-tarea', async (req, res) => {
     res.redirect('/tareas');
   }
 });
-
 
 
 app.get('/crear', (req, res) => {

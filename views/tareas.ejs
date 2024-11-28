@@ -26,68 +26,85 @@
     </div>
     <div class="contenido">
       <div class="contenido">
-        <div class="pendientes-columns">
-          
-          <!-- Lista de Pendientes -->
-          <div class="pendientes-lista">
-            <h3>Pendientes</h3>
-            <% tareas.forEach(tarea => { %>
-              <% if (tarea.estado === 'pendiente') { %>
-                <div class="pendiente por-vencer">
-                  <form action="/actualizar-tarea" method="POST">
-                    <label class="container">
-                      <input type="checkbox" class="checkbox" name="estado" value="en-proceso" data-id="<%= tarea.tarea_id %>" onchange="this.form.submit()">
-                      <div class="checkmark"></div>
-                    </label>
-                    <span class="icono"></span> <%= tarea.descripcion %>
-                    <input type="hidden" name="id" value="<%= tarea.tarea_id %>">
-                    <input type="hidden" name="fechaVencimiento" value="">
-                  </form>
-                </div>
-              <% } %>
-            <% }); %>
+        <div class="division-cuadrantes">
+          <div class="cuadrante">
+
+            <div class="pendientes-lista">
+              <h3>Pendientes</h3>
+              <% tareas.forEach(tarea => { %>
+                <% if (tarea.estado === 'pendiente') { %>
+                  <div class="pendiente por-vencer">
+                    <form action="/actualizar-tarea" method="POST">
+                      <label class="container">
+                        <input type="checkbox" class="checkbox" name="estado" value="en-proceso" data-id="<%= tarea.tarea_id %>" onchange="this.form.submit()">
+                        <div class="checkmark"></div>
+                      </label>
+                      <span class="icono"></span> <%= tarea.descripcion %>
+                      <input type="hidden" name="id" value="<%= tarea.tarea_id %>">
+                      <input type="hidden" name="fechaVencimiento" value="">
+                    </form>
+                  </div>
+                <% } %>
+              <% }); %>
+            </div>
+        
+            <!-- Lista de En Proceso -->
+            <div class="pendientes-lista">
+              <h3>En Proceso</h3>
+              <% tareas.forEach(tarea => { %>
+                <% if (tarea.estado === 'en-proceso') { %>
+                  <div class="pendiente en-proceso">
+                    <form action="/actualizar-tarea" method="POST">
+                      <label class="container">
+                        <input type="checkbox" class="checkbox" name="estado" value="terminado" data-id="<%= tarea.tarea_id %>" onchange="this.form.submit()">
+                        <div class="checkmark"></div>
+                      </label>
+                      <span class="icono"></span> <%= tarea.descripcion %>
+                      <input type="hidden" name="id" value="<%= tarea.tarea_id %>">
+                      <input type="hidden" name="fechaVencimiento" value="<%= new Date().toISOString() %>">
+                    </form>
+                  </div>
+                <% } %>
+              <% }); %>
+            </div>
+        
+            <!-- Lista de Terminadas -->
+            <div class="pendientes-lista">
+              <h3>Terminado</h3>
+              <% tareas.forEach(tarea => { %>
+                <% if (tarea.estado === 'terminado') { %>
+                  <div class="pendiente terminado">
+                    <form action="/eliminar-tarea" method="POST">
+                      <label class="container">
+                        <input type="checkbox" class="checkbox" checked="checked" disabled>
+                        <div class="checkmark"></div>
+                      </label>
+                      <span class="icono"></span> <%= tarea.descripcion %>
+                      <input type="hidden" name="id" value="<%= tarea.tarea_id %>">
+                      <input type="hidden" name="estado" value="terminado">
+                      <input type="hidden" name="fechaVencimiento" value="<%= tarea.fecha_vencimiento %>">
+                      <button type="submit" class="btn-delete">Eliminar</button> <!-- Botón para eliminar -->
+                    </form>
+                  </div>
+                <% } %>
+              <% }); %>
+            </div>
+            
+            
+            
+          </div>
+          <div class="cuadrante">
+
+          </div>
+
+          <!-- Tercer cuadrante -->
+          <div class="cuadrante">
+
           </div>
       
-          <!-- Lista de En Proceso -->
-          <div class="pendientes-lista">
-            <h3>En Proceso</h3>
-            <% tareas.forEach(tarea => { %>
-              <% if (tarea.estado === 'en-proceso') { %>
-                <div class="pendiente en-proceso">
-                  <form action="/actualizar-tarea" method="POST">
-                    <label class="container">
-                      <input type="checkbox" class="checkbox" name="estado" value="terminado" data-id="<%= tarea.tarea_id %>" onchange="this.form.submit()">
-                      <div class="checkmark"></div>
-                    </label>
-                    <span class="icono"></span> <%= tarea.descripcion %>
-                    <input type="hidden" name="id" value="<%= tarea.tarea_id %>">
-                    <input type="hidden" name="fechaVencimiento" value="<%= new Date().toISOString() %>">
-                  </form>
-                </div>
-              <% } %>
-            <% }); %>
-          </div>
-      
-          <!-- Lista de Terminadas -->
-          <div class="pendientes-lista">
-            <h3>Terminado</h3>
-            <% tareas.forEach(tarea => { %>
-              <% if (tarea.estado === 'terminado') { %>
-                <div class="pendiente terminado">
-                  <form action="/eliminar-tarea" method="POST">
-                    <label class="container">
-                      <input type="checkbox" class="checkbox" checked="checked" disabled>
-                      <div class="checkmark"></div>
-                    </label>
-                    <span class="icono"></span> <%= tarea.descripcion %>
-                    <input type="hidden" name="id" value="<%= tarea.tarea_id %>">
-                    <input type="hidden" name="estado" value="terminado">
-                    <input type="hidden" name="fechaVencimiento" value="<%= tarea.fecha_vencimiento %>">
-                    <button type="submit" class="btn-delete">Eliminar</button> <!-- Botón para eliminar -->
-                  </form>
-                </div>
-              <% } %>
-            <% }); %>
+          <!-- Cuarto cuadrante -->
+          <div class="cuadrante">
+ 
           </div>
         </div>
       </div>
@@ -110,4 +127,3 @@
       barraLateral.classList.remove('mostrar');
     });
   </script>
-</
