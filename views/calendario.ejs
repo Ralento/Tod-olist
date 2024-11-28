@@ -52,23 +52,29 @@
 
     document.addEventListener('DOMContentLoaded', function () {
       const calendarEl = document.getElementById('calendario');
+
+      // Usamos los eventos que pasamos desde Express y los inyectamos aquí como JSON
+      const eventos = <%- JSON.stringify(eventos) %>;
+
+      console.log("Eventos recibidos en el frontend:", eventos);
+
       const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-        locale: 'es', 
+        locale: 'es',
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+          right: 'dayGridMonth,timeGridWeek,timeGridDay',
         },
         buttonText: {
           today: 'Hoy',
           month: 'Mes',
           week: 'Semana',
-          day: 'Día'
+          day: 'Día',
         },
-        
-        
+        events: eventos,  // Usamos los eventos en el calendario
       });
+
       calendar.render();
     });
   </script>

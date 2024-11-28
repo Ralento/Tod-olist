@@ -10,6 +10,12 @@ const pool = new Pool({
   database: 'todo',
   port: 5432
 });
+// Configura EJS con delimitadores diferentes
+
+
+app.use(express.static('public'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 
 app.use(express.static('public'));
@@ -85,33 +91,19 @@ pool.query('SELECT * FROM tareas WHERE usuario_asignado_id = $1 ORDER BY priorid
 });
 
 
-app.post('/actualizar-tarea', async (req, res) => {
+app.post('/actualizar-tarea', (req, res) => {
   const { id, estado, fechaVencimiento } = req.body;
 
-  try {
-    // Verificamos si se está cambiando el estado a 'en-proceso' o 'terminado'
-    let query = 'UPDATE tareas SET estado = $1';
-    let values = [estado];
-
-    // Si la tarea se marca como terminada, actualizamos la fecha_vencimiento
-    if (estado === 'terminado' && fechaVencimiento) {
-      query += ', fecha_vencimiento = $2';
-      values.push(fechaVencimiento); // La fecha de vencimiento será la fecha actual
-    }
-
-    query += ' WHERE tarea_id = $3';
-    values.push(id);
-
-    // Ejecutamos la consulta
-    await pool.query(query, values);
-
-    // Redirigimos a la lista de tareas
-    res.redirect('/tareas');
-  } catch (error) {
-    console.error('Error al actualizar la tarea:', error);
-    res.redirect('/tareas');
-  }
+  // Asegúrate de actualizar la tarea en la base de datos
+  pool.query('UPDATE tareas SET estado = ?, fecha_vencimiento = ? WHERE tarea_id = ?', 
+    [estado, fechaVencimiento, id], 
+    (err, result) => {
+      if (err) throw err;
+      res.redirect('/tareas'); // Redirige después de actualizar la tarea
+    });
 });
+
+
 
 
 // Ruta para eliminar una tarea
@@ -137,7 +129,7 @@ app.get('/crear', (req, res) => {
 });
 
 app.post('/crear-tarea', async (req, res) => {
-  const { descripcion, estado, prioridad, fecha } = req.body; // Asegúrate de enviar la fecha desde el formulario
+  const { descripcion, estado, prioridad, fecha } = req.body; // Asegúrate de que la fecha esté llegando desde el formulario
   const userId = req.session.user_id;
 
   if (!userId) {
@@ -145,10 +137,10 @@ app.post('/crear-tarea', async (req, res) => {
   }
 
   try {
-    // Insertar la tarea
+    // Insertar la tarea con la fecha de vencimiento
     const tareaResult = await pool.query(
-      'INSERT INTO tareas (descripcion, estado, prioridad, fecha_creacion, usuario_asignado_id) VALUES ($1, $2, $3, NOW(), $4) RETURNING tarea_id',
-      [descripcion, estado, prioridad, userId]
+      'INSERT INTO tareas (descripcion, estado, prioridad, fecha_creacion, fecha_vencimiento, usuario_asignado_id) VALUES ($1, $2, $3, NOW(), $4, $5) RETURNING tarea_id',
+      [descripcion, estado, prioridad, fecha, userId]  // Asegúrate de que 'fecha' es el valor recibido desde el formulario
     );
 
     const tareaId = tareaResult.rows[0].tarea_id;
@@ -171,37 +163,26 @@ app.get('/calendario', async (req, res) => {
   const userId = req.session.user_id;
 
   try {
-      const tareas = await pool.query(
-          'SELECT descripcion, fecha_vencimiento, estado FROM tareas WHERE usuario_asignado_id = $1',
-          [userId]
-      );
-      res.render('calendario', { tareas: tareas.rows });
+    const tareas = await pool.query(
+      'SELECT descripcion, fecha_vencimiento, estado FROM tareas WHERE usuario_asignado_id = $1',
+      [userId]
+    );
+
+    const eventos = tareas.rows.map(tarea => ({
+      title: tarea.descripcion,
+      start: tarea.fecha_vencimiento,
+      end: tarea.fecha_vencimiento,
+      description: tarea.estado
+    }));
+
+    // Pasar los eventos al renderizado de la vista
+    res.render('calendario', { eventos: eventos });
   } catch (error) {
-      console.error('Error al cargar tareas:', error);
-      res.render('calendario', { tareas: [] });
+    console.error('Error al cargar tareas:', error);
+    res.render('calendario', { eventos: [] });
   }
 });
 
-app.get('/perfil', (req, res) => {
-  if (!req.session.user) {
-    return res.redirect('/');
-  }
-
-  const userId = req.session.user_id;
-
-  pool.query('SELECT nombre, usuario, contraseña, descripcion, telefono FROM usuarios WHERE usuario_id = $1', [userId])
-    .then(data => {
-      if (data.rows.length > 0) {
-        res.render('perfil', { user: data.rows[0] });
-      } else {
-        res.redirect('/'); // Si no se encuentra el usuario, redirige al inicio
-      }
-    })
-    .catch(error => {
-      console.error('Error al obtener datos del perfil:', error);
-      res.redirect('/');
-    });
-});
 
 app.post('/perfil', (req, res) => {
   const { name, user, password, description, tel } = req.body;
@@ -220,8 +201,7 @@ app.post('/perfil', (req, res) => {
     });
 });
 
-
-
 app.listen(7000 , () => {
     console.log('Server is running on port lhttp://localhost:7000');
 });
+

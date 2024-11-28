@@ -41,13 +41,14 @@
                     </label>
                     <span class="icono"></span> <%= tarea.descripcion %>
                     <input type="hidden" name="id" value="<%= tarea.tarea_id %>">
-                    <input type="hidden" name="fechaVencimiento" value="">
+                    <!-- Se asegura que se guarde la fecha de vencimiento -->
+                    <input type="hidden" name="fechaVencimiento" value="<%= tarea.fecha_vencimiento || new Date().toISOString() %>">
                   </form>
                 </div>
               <% } %>
             <% }); %>
           </div>
-      
+
           <!-- Lista de En Proceso -->
           <div class="pendientes-lista">
             <h3>En Proceso</h3>
@@ -61,13 +62,14 @@
                     </label>
                     <span class="icono"></span> <%= tarea.descripcion %>
                     <input type="hidden" name="id" value="<%= tarea.tarea_id %>">
-                    <input type="hidden" name="fechaVencimiento" value="<%= new Date().toISOString() %>">
+                    <!-- Usamos la fecha de vencimiento ya almacenada o la actual -->
+                    <input type="hidden" name="fechaVencimiento" value="<%= tarea.fecha_vencimiento || new Date().toISOString() %>">
                   </form>
                 </div>
               <% } %>
             <% }); %>
           </div>
-      
+
           <!-- Lista de Terminadas -->
           <div class="pendientes-lista">
             <h3>Terminado</h3>
@@ -89,9 +91,7 @@
               <% } %>
             <% }); %>
           </div>
-        </div>
-      </div>
-      
+
     </div>
     
       
