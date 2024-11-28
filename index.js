@@ -167,20 +167,49 @@ app.post('/crear-tarea', async (req, res) => {
 });
 
 
+
+
+
 app.get('/calendario', async (req, res) => {
   const userId = req.session.user_id;
+  res.render('calendario', { userId });
+});
 
+
+
+app.get('/eventos', async (req, res) => {
+  if (!req.session.user_id) {
+      return res.status(401).json({ success: false, message: 'No autorizado' });
+  }
   try {
-      const tareas = await pool.query(
-          'SELECT descripcion, fecha_vencimiento, estado FROM tareas WHERE usuario_asignado_id = $1',
-          [userId]
+      const result = await pool.query(
+          'SELECT evento_id AS id, titulo AS title, fecha_inicio AS start, fecha_fin AS end FROM eventos WHERE usuario_id = $1',
+          [req.session.user_id]
       );
-      res.render('calendario', { tareas: tareas.rows });
+      res.json(result.rows);
   } catch (error) {
-      console.error('Error al cargar tareas:', error);
-      res.render('calendario', { tareas: [] });
+      console.error('Error al obtener eventos:', error);
+      res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
 });
+
+app.post('/eventos', async (req, res) => {
+  if (!req.session.user_id) {
+      return res.status(401).json({ success: false, message: 'No autorizado' });
+  }
+  const { titulo, fecha_inicio, fecha_fin } = req.body;
+  try {
+      await pool.query(
+          'INSERT INTO eventos (titulo, fecha_inicio, fecha_fin, usuario_id) VALUES ($1, $2, $3, $4)',
+          [titulo, fecha_inicio, fecha_fin, req.session.user_id]
+      );
+      res.json({ success: true });
+  } catch (error) {
+      console.error('Error al guardar evento:', error);
+      res.status(500).json({ success: false, message: 'Error interno del servidor' });
+  }
+});
+
 
 app.get('/perfil', (req, res) => {
   if (!req.session.user) {

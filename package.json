@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/Ralento/Todolist#readme",
   "dependencies": {
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
     "bcrypt": "^5.1.1",
     "ejs": "^3.1.10",
     "express": "^4.21.1",
