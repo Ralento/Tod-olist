@@ -76,6 +76,26 @@
             },
         });
         calendar.render();
+      const calendarEl = document.getElementById('calendario');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        locale: 'es', 
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        buttonText: {
+          today: 'Hoy',
+          month: 'Mes',
+          week: 'Semana',
+          day: 'Día'
+        },
+        
+        
+      });
+      calendar.render();
+>>>>>>> 56a9a052f418a3dce8535c2ea9a7e2c5114666b8
     });
 </script>
   
