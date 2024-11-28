@@ -31,22 +31,29 @@ app.get('/', (req, res) => {
 
 app.post('/login', (req, res) => {
   const { user, password } = req.body;
-  console.log('Datos enviados por el formulario:', user, password); // Muestra los datos enviados
+  console.log('Datos enviados por el formulario:', user, password);
   pool.query('SELECT * FROM usuarios WHERE usuario = $1 AND contraseña = $2', [user, password])
     .then((data) => {
-      console.log('Datos del usuario encontrado:', data.rows); // Muestra los resultados de la consulta
+      console.log('Datos del usuario encontrado:', data.rows);
       if (data.rows.length > 0) {
         req.session.user = user;
-        req.session.user_id = data.rows[0].usuario_id; // Cambia aquí si la columna es diferente
-        console.log('Usuario autenticado, ID:', req.session.user_id); // Muestra el ID en la sesión
-        res.redirect('/tareas');
+        req.session.user_id = data.rows[0].usuario_id;
+
+        console.log('Usuario autenticado, ID:', req.session.user_id);
+
+        // Redirigir según si es administrador o no
+        if (user === 'Administrador') {
+          res.redirect('/tareasadministrador');
+        } else {
+          res.redirect('/tareas');
+        }
       } else {
         console.log('No se encontraron coincidencias para el usuario y contraseña');
         res.render('login', { mensaje: 'Usuario o contraseña incorrectos.' });
       }
     })
     .catch((error) => {
-      console.error('Error al realizar la consulta:', error); // Muestra cualquier error SQL
+      console.error('Error al realizar la consulta:', error);
       res.render('login', { mensaje: 'Error al iniciar sesión.' });
     });
 });
@@ -63,6 +70,36 @@ app.post('/register', async (req, res) => {
             res.render('login');
         });
 });
+
+
+
+
+app.get('/tareasadmin', async (req, res) => {
+  if (!req.session.user || req.session.user !== 'Administrador') {
+    return res.redirect('/');
+  }
+
+  try {
+    // Obtener todos los usuarios
+    const usuariosResult = await pool.query('SELECT * FROM usuarios');
+    const usuarios = usuariosResult.rows;
+
+    // Obtener tareas de cada usuario
+    const tareasPromises = usuarios.map(async (usuario) => {
+      const tareasResult = await pool.query('SELECT * FROM tareas WHERE usuario_asignado_id = $1', [usuario.usuario_id]);
+      return { usuario, tareas: tareasResult.rows };
+    });
+
+    const usuariosConTareas = await Promise.all(tareasPromises);
+
+    res.render('admin', { usuariosConTareas });
+  } catch (error) {
+    console.error('Error al obtener usuarios y tareas:', error);
+    res.render('admin', { mensaje: 'Error al obtener datos.' });
+  }
+});
+
+
 
 app.get('/tareas', async(req, res) => {
   if (!req.session.user) {
@@ -118,9 +155,17 @@ app.post('/eliminar-tarea', async (req, res) => {
   const { id } = req.body;
 
   try {
+    
+    
+
     // Ejecutamos la consulta para eliminar la tarea por su ID
+    await pool.query('DELETE FROM calendario WHERE tarea_id = $1', [id]);
+
+
     await pool.query('DELETE FROM tareas WHERE tarea_id = $1', [id]);
 
+
+ 
     // Redirigimos a la lista de tareas después de eliminar
     res.redirect('/tareas');
   } catch (error) {

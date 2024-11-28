@@ -10,14 +10,13 @@
 <body>
   <div class="contenedor">
     <!-- Barra superior -->
-    <div class="barra-superior">
-      <div class="menu-icono" id="menu-icono"></div>
-      <div class="titulo">To-Do List</div>
-    </div>
-
+    <header class="barra-superior">
+        <div id="menu-icono" class="menu-icono" onclick="toggleSidebar()"></div>
+        <h1 class="titulo">To-Do List</h1>
+      </header>
     <!-- Barra lateral -->
-    <div class="barra-lateral" id="barra-lateral">
-        <div class="cerrar" id="cerrar-lateral">&times;</div>
+    <div class="barra-lateral oculto" id="barra-lateral">
+        <span class="cerrar" id="cerrar-lateral" onclick="toggleSidebar()">&times;</span>
         <ul>
             <li><a href="/tareas"><i class="fas fa-home" style="font-size: 30px;"></i><p>Inicio</p></a></li>
             <li><a href="/calendario"><i class="fa-regular fa-calendar" style="font-size: 30px;"></i><p>Calendario</p></a></li>
