@@ -30,6 +30,9 @@ body {
   background-color: #2c2c2c;
   padding: 15px 20px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+  position: sticky; /* Mantener fija en la parte superior */
+  top: 0;
+  z-index: 1000;
 }
 
 .menu-icono {
@@ -108,18 +111,17 @@ body {
 }
 
 
-.contenido {
-  flex: 1;
+.contenedor {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  padding: 15px 20px;
-  padding-left: 250px;
+  height: 100%;
+  width: 100%;
 }
+
 
 .contenido h2 {
   padding: 15px 20px;
-  padding-left: 75px;
+  padding-left: 0px;
 }
 
 .mensaje-crear {
@@ -255,35 +257,40 @@ body {
   display: none;
 }
 
+.division-cuadrantes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+  flex: 1; /* Ocupa todo el espacio disponible debajo de la barra */
+  padding: 20px;
 
-
-.pendientes-columns {
-  padding: 40px;
-  display: flex;
-  justify-content: center; 
-  gap: 20px; 
-  width: 100%;
-  max-width: 1200px; 
-  margin: 0 auto; 
 }
 
-.pendientes-lista {
+.cuadrante {
+  background-color: #2c2c2c;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  padding: 99px;
+  color: white;
   display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 30%; 
+  align-items: center;
+  justify-content: center;
+}
+
+/* Estilos adicionales para las listas */
+.pendientes-lista {
+  flex: 1;
   padding: 10px;
+  background-color: #333;
+  color: white;
   border-radius: 10px;
-  background-color: #333; 
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-  margin: 15px;
-  padding: 20px;
+  margin: 5px;
+  overflow-y: auto;
 }
 
 .pendientes-lista h3 {
-  font-size: 20px;
-  font-weight: bold;
-  color: white;
+  text-align: center;
   margin-bottom: 10px;
 }
 
