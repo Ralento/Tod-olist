@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calendario</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/main.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.8/main.min.js"></script>
   <link rel="stylesheet" href="css/calendario.css">
 </head>
 <body>
@@ -32,25 +34,48 @@
             <p>Perfil</p>
         </a>
     </ul>
-  </div>
+</div>
 
-  <!-- Contenido -->
+
+  
   <div class="contenido">
     <h2 class="titulo-calendario">Calendario</h2>
     <div id="calendario"></div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.js"></script>
   <script>
-    function mostrarMenu() {
-      document.getElementById('barraLateral').classList.add('mostrar');
-    }
-
-    function cerrarMenu() {
-      document.getElementById('barraLateral').classList.remove('mostrar');
-    }
-
     document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendar');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'es',
+            events: '/api/eventos', // Ruta para obtener los eventos
+            selectable: true,
+            select: function (info) {
+                const title = prompt('Ingrese el título del evento:');
+                if (title) {
+                    fetch('/api/eventos', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            titulo: title,
+                            fecha_inicio: info.startStr,
+                            fecha_fin: info.endStr
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Evento creado!');
+                            calendar.refetchEvents();
+                        } else {
+                            alert('Error al guardar el evento.');
+                        }
+                    });
+                }
+            },
+        });
+        calendar.render();
       const calendarEl = document.getElementById('calendario');
 
       // Usamos los eventos que pasamos desde Express y los inyectamos aquí como JSON
@@ -76,7 +101,9 @@
       });
 
       calendar.render();
+>>>>>>> 56a9a052f418a3dce8535c2ea9a7e2c5114666b8
     });
-  </script>
+</script>
+  
 </body>
 </html>

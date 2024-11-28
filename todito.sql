@@ -1,3 +1,9 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 16.6 (Ubuntu 16.6-1.pgdg24.04+1)
+-- Dumped by pg_dump version 17.2 (Ubuntu 17.2-1.pgdg24.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -49,6 +55,44 @@ ALTER SEQUENCE public.calendario_calendario_id_seq OWNER TO postgres;
 --
 
 ALTER SEQUENCE public.calendario_calendario_id_seq OWNED BY public.calendario.calendario_id;
+
+
+--
+-- Name: eventos; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.eventos (
+    evento_id integer NOT NULL,
+    titulo character varying(255) NOT NULL,
+    descripcion text,
+    fecha_inicio timestamp without time zone NOT NULL,
+    fecha_fin timestamp without time zone NOT NULL,
+    usuario_id integer
+);
+
+
+ALTER TABLE public.eventos OWNER TO postgres;
+
+--
+-- Name: eventos_evento_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.eventos_evento_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.eventos_evento_id_seq OWNER TO postgres;
+
+--
+-- Name: eventos_evento_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.eventos_evento_id_seq OWNED BY public.eventos.evento_id;
 
 
 --
@@ -136,6 +180,13 @@ ALTER TABLE ONLY public.calendario ALTER COLUMN calendario_id SET DEFAULT nextva
 
 
 --
+-- Name: eventos evento_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.eventos ALTER COLUMN evento_id SET DEFAULT nextval('public.eventos_evento_id_seq'::regclass);
+
+
+--
 -- Name: tareas tarea_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -155,6 +206,17 @@ ALTER TABLE ONLY public.usuarios ALTER COLUMN usuario_id SET DEFAULT nextval('pu
 
 COPY public.calendario (calendario_id, tarea_id, fecha, usuario_id) FROM stdin;
 1	13	2024-11-30	1
+2	14	2024-11-25	10
+3	15	2024-11-30	10
+4	16	2024-11-28	10
+\.
+
+
+--
+-- Data for Name: eventos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.eventos (evento_id, titulo, descripcion, fecha_inicio, fecha_fin, usuario_id) FROM stdin;
 \.
 
 
@@ -165,13 +227,14 @@ COPY public.calendario (calendario_id, tarea_id, fecha, usuario_id) FROM stdin;
 COPY public.tareas (descripcion, estado, prioridad, fecha_creacion, fecha_vencimiento, usuario_asignado_id, tarea_id) FROM stdin;
 CODIGO	terminado	baja	2024-11-24	\N	1	4
 proyecto 	terminado	media	2024-11-24	2024-11-24	1	2
-Examen de matematicas	terminado	alta	2024-11-24	2024-11-24	1	3
-CODIGO 2	terminado	alta	2024-11-24	2024-11-24	1	5
 exposicion de proyecto 	pendiente	alta	2024-11-24	\N	1	8
 aaa	en_proceso	media	2024-11-24	\N	\N	9
 base de datos proyecto 	en_proceso	alta	2024-11-24	\N	1	10
 Examen de matematicas 2	pendiente	alta	2024-11-24	\N	1	11
 Testing de la base 	pendiente	alta	2024-11-24	\N	1	13
+Fisting	terminado	alta	2024-11-25	2024-11-26	10	14
+Filis-fest	terminado	alta	2024-11-25	\N	10	15
+examen 	pendiente	baja	2024-11-25	\N	10	16
 \.
 
 
@@ -180,9 +243,11 @@ Testing de la base 	pendiente	alta	2024-11-24	\N	1	13
 --
 
 COPY public.usuarios (nombre, usuario, telefono, "contraseña", usuario_id, descripcion) FROM stdin;
-Roy Bernal Ibarra	Ralentomvk	4494575413	rollo200726	1	ou che
+Roy Bernal Ibarra	Ralento.mvk	4494575413	rollo200726	1	ou che
 Filis Embriz Pozos 	Filis	4495411077	12345	8	\N
 Filis Embriz Pozos 	Filis	4495411077	1234	9	\N
+Saul	jvxz	123123	rollo200726	10	\N
+a	a	13123	a	11	\N
 \.
 
 
@@ -190,21 +255,28 @@ Filis Embriz Pozos 	Filis	4495411077	1234	9	\N
 -- Name: calendario_calendario_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.calendario_calendario_id_seq', 1, true);
+SELECT pg_catalog.setval('public.calendario_calendario_id_seq', 4, true);
+
+
+--
+-- Name: eventos_evento_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.eventos_evento_id_seq', 1, false);
 
 
 --
 -- Name: tareas_tarea_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.tareas_tarea_id_seq', 13, true);
+SELECT pg_catalog.setval('public.tareas_tarea_id_seq', 16, true);
 
 
 --
 -- Name: usuarios_usuario_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.usuarios_usuario_id_seq', 9, true);
+SELECT pg_catalog.setval('public.usuarios_usuario_id_seq', 11, true);
 
 
 --
@@ -213,6 +285,14 @@ SELECT pg_catalog.setval('public.usuarios_usuario_id_seq', 9, true);
 
 ALTER TABLE ONLY public.calendario
     ADD CONSTRAINT calendario_pkey PRIMARY KEY (calendario_id);
+
+
+--
+-- Name: eventos eventos_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.eventos
+    ADD CONSTRAINT eventos_pkey PRIMARY KEY (evento_id);
 
 
 --
@@ -245,6 +325,14 @@ ALTER TABLE ONLY public.calendario
 
 ALTER TABLE ONLY public.calendario
     ADD CONSTRAINT calendario_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES public.usuarios(usuario_id);
+
+
+--
+-- Name: eventos eventos_usuario_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.eventos
+    ADD CONSTRAINT eventos_usuario_id_fkey FOREIGN KEY (usuario_id) REFERENCES public.usuarios(usuario_id) ON DELETE CASCADE;
 
 
 --

@@ -6,7 +6,7 @@ const { Pool } = require('pg');
 const pool = new Pool({
   host: 'localhost',
   user: 'postgres',
-  password: '1234',
+  password: 'rollo200726',
   database: 'todo',
   port: 5432
 });
@@ -37,22 +37,29 @@ app.get('/', (req, res) => {
 
 app.post('/login', (req, res) => {
   const { user, password } = req.body;
-  console.log('Datos enviados por el formulario:', user, password); // Muestra los datos enviados
+  console.log('Datos enviados por el formulario:', user, password);
   pool.query('SELECT * FROM usuarios WHERE usuario = $1 AND contraseña = $2', [user, password])
     .then((data) => {
-      console.log('Datos del usuario encontrado:', data.rows); // Muestra los resultados de la consulta
+      console.log('Datos del usuario encontrado:', data.rows);
       if (data.rows.length > 0) {
         req.session.user = user;
-        req.session.user_id = data.rows[0].usuario_id; // Cambia aquí si la columna es diferente
-        console.log('Usuario autenticado, ID:', req.session.user_id); // Muestra el ID en la sesión
-        res.redirect('/tareas');
+        req.session.user_id = data.rows[0].usuario_id;
+
+        console.log('Usuario autenticado, ID:', req.session.user_id);
+
+        // Redirigir según si es administrador o no
+        if (user === 'Administrador') {
+          res.redirect('/tareasadministrador');
+        } else {
+          res.redirect('/tareas');
+        }
       } else {
         console.log('No se encontraron coincidencias para el usuario y contraseña');
         res.render('login', { mensaje: 'Usuario o contraseña incorrectos.' });
       }
     })
     .catch((error) => {
-      console.error('Error al realizar la consulta:', error); // Muestra cualquier error SQL
+      console.error('Error al realizar la consulta:', error);
       res.render('login', { mensaje: 'Error al iniciar sesión.' });
     });
 });
@@ -69,6 +76,36 @@ app.post('/register', async (req, res) => {
             res.render('login');
         });
 });
+
+
+
+
+app.get('/tareasadmin', async (req, res) => {
+  if (!req.session.user || req.session.user !== 'Administrador') {
+    return res.redirect('/');
+  }
+
+  try {
+    // Obtener todos los usuarios
+    const usuariosResult = await pool.query('SELECT * FROM usuarios');
+    const usuarios = usuariosResult.rows;
+
+    // Obtener tareas de cada usuario
+    const tareasPromises = usuarios.map(async (usuario) => {
+      const tareasResult = await pool.query('SELECT * FROM tareas WHERE usuario_asignado_id = $1', [usuario.usuario_id]);
+      return { usuario, tareas: tareasResult.rows };
+    });
+
+    const usuariosConTareas = await Promise.all(tareasPromises);
+
+    res.render('admin', { usuariosConTareas });
+  } catch (error) {
+    console.error('Error al obtener usuarios y tareas:', error);
+    res.render('admin', { mensaje: 'Error al obtener datos.' });
+  }
+});
+
+
 
 app.get('/tareas', async(req, res) => {
   if (!req.session.user) {
@@ -94,16 +131,30 @@ pool.query('SELECT * FROM tareas WHERE usuario_asignado_id = $1 ORDER BY priorid
 app.post('/actualizar-tarea', (req, res) => {
   const { id, estado, fechaVencimiento } = req.body;
 
-  // Asegúrate de actualizar la tarea en la base de datos
-  pool.query('UPDATE tareas SET estado = ?, fecha_vencimiento = ? WHERE tarea_id = ?', 
-    [estado, fechaVencimiento, id], 
-    (err, result) => {
-      if (err) throw err;
-      res.redirect('/tareas'); // Redirige después de actualizar la tarea
-    });
+  try {
+    // Verificamos si se está cambiando el estado a 'en-proceso' o 'terminado'
+    let query = 'UPDATE tareas SET estado = $1';
+    let values = [estado];
+
+    // Si la tarea se marca como terminada, actualizamos la fecha_vencimiento
+    if (estado === 'terminado' && fechaVencimiento) {
+      query += ', fecha_vencimiento = $2';
+      values.push(fechaVencimiento); // La fecha de vencimiento será la fecha actual
+    }
+
+    query += ' WHERE tarea_id = $3';
+    values.push(id);
+
+    // Ejecutamos la consulta
+    await pool.query(query, values);
+
+    // Redirigimos a la lista de tareas
+    res.redirect('/tareas');
+  } catch (error) {
+    console.error('Error al actualizar la tarea:', error);
+    res.redirect('/tareas');
+  }
 });
-
-
 
 
 // Ruta para eliminar una tarea
@@ -111,9 +162,17 @@ app.post('/eliminar-tarea', async (req, res) => {
   const { id } = req.body;
 
   try {
+    
+    
+
     // Ejecutamos la consulta para eliminar la tarea por su ID
+    await pool.query('DELETE FROM calendario WHERE tarea_id = $1', [id]);
+
+
     await pool.query('DELETE FROM tareas WHERE tarea_id = $1', [id]);
 
+
+ 
     // Redirigimos a la lista de tareas después de eliminar
     res.redirect('/tareas');
   } catch (error) {
@@ -121,7 +180,6 @@ app.post('/eliminar-tarea', async (req, res) => {
     res.redirect('/tareas');
   }
 });
-
 
 
 app.get('/crear', (req, res) => {
@@ -159,30 +217,44 @@ app.post('/crear-tarea', async (req, res) => {
 });
 
 
+
+
+
 app.get('/calendario', async (req, res) => {
   const userId = req.session.user_id;
 
   try {
-    const tareas = await pool.query(
-      'SELECT descripcion, fecha_vencimiento, estado FROM tareas WHERE usuario_asignado_id = $1',
-      [userId]
-    );
-
-    const eventos = tareas.rows.map(tarea => ({
-      title: tarea.descripcion,
-      start: tarea.fecha_vencimiento,
-      end: tarea.fecha_vencimiento,
-      description: tarea.estado
-    }));
-
-    // Pasar los eventos al renderizado de la vista
-    res.render('calendario', { eventos: eventos });
+      const tareas = await pool.query(
+          'SELECT descripcion, fecha_vencimiento, estado FROM tareas WHERE usuario_asignado_id = $1',
+          [userId]
+      );
+      res.render('calendario', { tareas: tareas.rows });
   } catch (error) {
-    console.error('Error al cargar tareas:', error);
-    res.render('calendario', { eventos: [] });
+      console.error('Error al cargar tareas:', error);
+      res.render('calendario', { tareas: [] });
   }
 });
 
+app.get('/perfil', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/');
+  }
+
+  const userId = req.session.user_id;
+
+  pool.query('SELECT nombre, usuario, contraseña, descripcion, telefono FROM usuarios WHERE usuario_id = $1', [userId])
+    .then(data => {
+      if (data.rows.length > 0) {
+        res.render('perfil', { user: data.rows[0] });
+      } else {
+        res.redirect('/'); // Si no se encuentra el usuario, redirige al inicio
+      }
+    })
+    .catch(error => {
+      console.error('Error al obtener datos del perfil:', error);
+      res.redirect('/');
+    });
+});
 
 app.post('/perfil', (req, res) => {
   const { name, user, password, description, tel } = req.body;
@@ -204,4 +276,3 @@ app.post('/perfil', (req, res) => {
 app.listen(7000 , () => {
     console.log('Server is running on port lhttp://localhost:7000');
 });
-

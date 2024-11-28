@@ -10,14 +10,14 @@
 <body>
   <div class="contenedor">
     <!-- Barra superior -->
-    <div class="barra-superior">
-      <div class="menu-icono" id="menu-icono"></div>
-      <div class="titulo">To-Do List</div>
-    </div>
+    <header class="barra-superior">
+      <div class="menu-icono" id="menu-icono" onclick="toggleSidebar()"></div>
+      <h1 class="titulo">To-Do List</h1>
+    </header>
 
     <!-- Barra lateral -->
-    <div class="barra-lateral" id="barra-lateral">
-      <div class="cerrar" id="cerrar-lateral">&times;</div>
+    <div class="barra-lateral oculto" id="barra-lateral">
+      <span class="cerrar" id="cerrar-lateral" onclick="toggleSidebar()">&times;</span>
       <ul>
         <li><a href="/calendario"><i class="fa-regular fa-calendar"style="font-size: 30px;"></i><p>Calendario</p></a></li>
         <li><a href="/crear"><i class="fa-solid fa-plus"style="font-size: 30px;"></i><p>Crear</p></a></li>
@@ -27,7 +27,10 @@
     <div class="contenido">
       <div class="contenido">
         <div class="pendientes-columns">
-          
+          <h1>Tareas de <%= user %></h1>
+    <% if (mensaje) { %>
+        <p><%= mensaje %></p>
+    <% } %>
           <!-- Lista de Pendientes -->
           <div class="pendientes-lista">
             <h3>Pendientes</h3>
