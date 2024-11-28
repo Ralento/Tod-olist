@@ -6,7 +6,7 @@ const { Pool } = require('pg');
 const pool = new Pool({
   host: 'localhost',
   user: 'postgres',
-  password: 'rollo200726',
+  password: '1234',
   database: 'todo',
   port: 5432
 });
@@ -128,7 +128,7 @@ pool.query('SELECT * FROM tareas WHERE usuario_asignado_id = $1 ORDER BY priorid
 });
 
 
-app.post('/actualizar-tarea', (req, res) => {
+app.post('/actualizar-tarea', async  (req, res) => {
   const { id, estado, fechaVencimiento } = req.body;
 
   try {
@@ -224,14 +224,23 @@ app.get('/calendario', async (req, res) => {
   const userId = req.session.user_id;
 
   try {
-      const tareas = await pool.query(
-          'SELECT descripcion, fecha_vencimiento, estado FROM tareas WHERE usuario_asignado_id = $1',
-          [userId]
-      );
-      res.render('calendario', { tareas: tareas.rows });
+    const tareas = await pool.query(
+      'SELECT descripcion, fecha_vencimiento, estado FROM tareas WHERE usuario_asignado_id = $1',
+      [userId]
+    );
+
+    const eventos = tareas.rows.map(tarea => ({
+      title: tarea.descripcion,
+      start: tarea.fecha_vencimiento,
+      end: tarea.fecha_vencimiento,
+      description: tarea.estado
+    }));
+
+    // Pasar los eventos al renderizado de la vista
+    res.render('calendario', { eventos: eventos });
   } catch (error) {
-      console.error('Error al cargar tareas:', error);
-      res.render('calendario', { tareas: [] });
+    console.error('Error al cargar tareas:', error);
+    res.render('calendario', { eventos: [] });
   }
 });
 

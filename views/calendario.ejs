@@ -45,64 +45,32 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const calendarEl = document.getElementById('calendar');
-        const calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            locale: 'es',
-            events: '/api/eventos', // Ruta para obtener los eventos
-            selectable: true,
-            select: function (info) {
-                const title = prompt('Ingrese el título del evento:');
-                if (title) {
-                    fetch('/api/eventos', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            titulo: title,
-                            fecha_inicio: info.startStr,
-                            fecha_fin: info.endStr
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Evento creado!');
-                            calendar.refetchEvents();
-                        } else {
-                            alert('Error al guardar el evento.');
-                        }
-                    });
-                }
-            },
-        });
-        calendar.render();
-      const calendarEl = document.getElementById('calendario');
+    const calendarEl = document.getElementById('calendario');
+    
+    // Usar la variable eventos pasada desde Express
+    const eventos = <%= JSON.stringify(eventos) %>;  // Esto pasa los datos como una variable JS
 
-      // Usamos los eventos que pasamos desde Express y los inyectamos aquí como JSON
-      const eventos = <%- JSON.stringify(eventos) %>;
+    console.log("Eventos recibidos en el frontend:", eventos);
 
-      console.log("Eventos recibidos en el frontend:", eventos);
-
-      const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        locale: 'es',
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay',
-        },
-        buttonText: {
-          today: 'Hoy',
-          month: 'Mes',
-          week: 'Semana',
-          day: 'Día',
-        },
-        events: eventos,  // Usamos los eventos en el calendario
-      });
-
-      calendar.render();
->>>>>>> 56a9a052f418a3dce8535c2ea9a7e2c5114666b8
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      locale: 'es',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay',
+      },
+      buttonText: {
+        today: 'Hoy',
+        month: 'Mes',
+        week: 'Semana',
+        day: 'Día',
+      },
+      events: eventos,  // Usamos los eventos directamente aquí
     });
+
+    calendar.render();
+  });
 </script>
   
 </body>
